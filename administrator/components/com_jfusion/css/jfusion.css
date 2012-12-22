@@ -170,3 +170,18 @@ a.navButton:hover {
 .icon-48-importexport {
     background-image: url(../images/importexport.png);
 }
+
+/* begin f2g swatch */
+div.current select {
+	margin-top: 7px !important;
+	margin-bottom: 0 !important;
+}
+select.modswatch {
+	width: 130px;
+}
+div#params_phpBB3FixSwatch.button2-left, 
+div#params_phpBB3UnfixSwatch.button2-left {
+	margin: 5px 0 0 10px;
+}
+/* end f2g swatch */
+

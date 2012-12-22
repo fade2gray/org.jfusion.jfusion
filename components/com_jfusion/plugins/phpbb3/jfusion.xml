@@ -131,6 +131,12 @@
 		<param name="@spacer" type="spacer" default="" label="" description="" />
 		<param name=" " type="helptext" default="QUICK_MOD" label=""/>
 		<param name="showQuickMod" default="" type="JFusionCustomParam" description="QUICK_MOD" label="SHOW_QUICK_MOD"/>
+		<!-- begin f2g swatch -->
+		<param name="@spacer" type="spacer" default="" label="" description="" />
+		<param name=" " type="helptext" default="SWATCH_MOD_DESCR" label=""/>
+		<param name="phpBB3FixSwatch" type="phpBB3FixSwatch" default="" label="UNFIXED_SWATCH" description="UNFIXED_SWATCH_DESCR" class="modswatch"/>
+		<param name="phpBB3UnfixSwatch" type="phpBB3UnfixSwatch" default="" label="FIXED_SWATCH" description="FIXED_SWATCH_DESCR" class="modswatch"/>
+		<!-- end f2g swatch -->
 		<param name="jfusionbox" type="text" default="" label="URL_OPTIONS" description="" />
 		<param name=" " type="helptext" default="URL_OPTIONS_DESCR" label=""/>
 		<param name="lostpassword_url" label="LOST_PASSWORD_URL" type="text" size="50" default="" description="LOST_PASSWORD_URL" />

@@ -439,8 +439,10 @@ HTML;
         $file_data = JFile::read($auth_file);
         preg_match_all('/define\(\'JPATH_BASE\'\,(.*)\)/', $file_data, $matches);
         //compare it with our joomla path
-        if ($matches[1][0] != '\'' . JPATH_SITE . '\'') {
-            $file_data = preg_replace('/define\(\'JPATH_BASE\'\,(.*)\)/', 'define(\'JPATH_BASE\',\'' . JPATH_SITE . '\')', $file_data);
+        // f2g authmod // if ($matches[1][0] != '\'' . JPATH_SITE . '\'') {
+				if (!preg_match('#'.JPATH_COMPONENT_SITE.'#',$file_data)) {
+            // f2g authmod // $file_data = preg_replace('/define\(\'JPATH_BASE\'\,(.*)\)/', 'define(\'JPATH_BASE\',\'' . JPATH_SITE . '\')', $file_data);
+						$file_data = preg_replace('/\$jpath_component_site/', '\''.JPATH_COMPONENT_SITE.'\'', $file_data);
             $file_data = preg_replace('/\$JFusionActivePlugin \=(.*?)\;/', '$JFusionActivePlugin =\'' . $this->getJname() . '\';', $file_data);
             JFile::write($auth_file, $file_data);
         }
@@ -625,6 +627,11 @@ HTML;
            $return = false;
         }
 
+				// begin f2g swatch
+				// TODO: do this properly
+				$this->uninstallModSwatch();
+				// end f2g swatch
+
         return array($return, $reasons);
     }
 
@@ -647,4 +654,63 @@ HTML;
 	{
 		return 'DEPENDS';
 	}    
+
+// begin f2g swatch
+	function fixModSwatch(){
+		$cName = 'JFusion_phpBB3_FixSwatch';
+		if(array_key_exists($cName,$_COOKIE)){
+			$mod_file = $_COOKIE[$cName];
+			if(file_exists($mod_file)){
+				$file_data = JFile::read($mod_file);
+				if(stristr($file_data,'"images/spacer.gif"')){
+					$sourcePath=JFusionFactory::getParams('phpbb3')->get('source_path'); // /home/sandbox/htdocs/www/jfusion/1.8/p
+					$phpbbRoot = str_replace($_SERVER['DOCUMENT_ROOT'],'',$sourcePath); // /jfusion/1.8/p
+					$file_data=str_ireplace('images/spacer.gif',$phpbbRoot.'/images/spacer.gif',$file_data);
+					JFile::write($mod_file, $file_data);
+					setcookie ($cName, "", time() - 3600);
+				}
+			}
+		}else{
+			JError::raiseWarning('',JText::_('NO_STYLE_SELECTED'));
+			JError::raiseNotice('',JText::_('WRONG_BUTTON'));
+		}
+	}
+
+	function unfixModSwatch(){
+		$cName = 'JFusion_phpBB3_UnfixSwatch';
+		if(array_key_exists($cName,$_COOKIE)){
+			$mod_file = $_COOKIE[$cName];
+			if(file_exists($mod_file)){
+				$file_data = JFile::read($mod_file);
+				$sourcePath=JFusionFactory::getParams('phpbb3')->get('source_path');
+				$phpbbRoot = str_replace($_SERVER['DOCUMENT_ROOT'],'',$sourcePath);
+				if(stristr($file_data,'"'.$phpbbRoot.'/images/spacer.gif"')){
+					$file_data=str_ireplace($phpbbRoot.'/images/spacer.gif','images/spacer.gif',$file_data);
+					JFile::write($mod_file, $file_data);
+					setcookie ($cName, "", time() - 3600);
+				}
+			}
+		}else{
+			JError::raiseWarning('',JText::_('NO_STYLE_SELECTED'));
+			JError::raiseNotice('',JText::_('WRONG_BUTTON'));
+		}
+	}
+
+	function uninstallModSwatch(){
+		include JPATH_ADMINISTRATOR.DS.'components'.DS.'com_jfusion'.DS.'fields'.DS.'phpbb3unfixswatch.php';
+		$getList = new JFormFieldphpBB3UnfixSwatch;
+		$unfixList = array_flip($getList->unfixList);
+		$sourcePath=JFusionFactory::getParams('phpbb3')->get('source_path');
+		$phpbbRoot = str_replace($_SERVER['DOCUMENT_ROOT'],'',$sourcePath);
+		foreach($unfixList as $mod_file){
+			if(preg_match('#editor\.js$#',$mod_file)){
+				$file_data = JFile::read($mod_file);
+				if(stristr($file_data,'"'.$phpbbRoot.'/images/spacer.gif"')){
+					$file_data=str_ireplace($phpbbRoot.'/images/spacer.gif','images/spacer.gif',$file_data);
+					JFile::write($mod_file, $file_data);
+				}
+			}
+		}
+	}
+// end f2g swatch
 }

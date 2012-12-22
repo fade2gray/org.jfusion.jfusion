@@ -239,9 +239,10 @@ function logout_jfusion(&$data) {
  * @return JApplication
  */
 function startJoomla() {
-    global $phpbb_root_path;
+		// f2g authmod // global $phpbb_root_path;
     define('_JFUSIONAPI_INTERNAL', true);
-    require_once $phpbb_root_path . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'com_jfusion' . DIRECTORY_SEPARATOR  . 'jfusionapi.php';
+    // f2g authmod // require_once $phpbb_root_path . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'com_jfusion' . DIRECTORY_SEPARATOR  . 'jfusionapi.php';
+    require_once $jpath_component_site . DIRECTORY_SEPARATOR  . 'jfusionapi.php'; // f2g authmod
     $mainframe = JFusionAPIInternal::startJoomla();
     return $mainframe;
 }
