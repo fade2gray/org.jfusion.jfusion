@@ -437,7 +437,7 @@ HTML;
         //get the joomla path from the file
         jimport('joomla.filesystem.file');
         $file_data = JFile::read($auth_file);
-        preg_match_all('/define\(\'JPATH_BASE\'\,(.*)\)/', $file_data, $matches);
+        // f2g authmod // preg_match_all('/define\(\'JPATH_BASE\'\,(.*)\)/', $file_data, $matches);
         //compare it with our joomla path
         // f2g authmod // if ($matches[1][0] != '\'' . JPATH_SITE . '\'') {
 				if (!preg_match('#'.JPATH_COMPONENT_SITE.'#',$file_data)) {
